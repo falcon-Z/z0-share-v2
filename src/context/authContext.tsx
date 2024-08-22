@@ -24,32 +24,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, username]);
 
   const createUser = (username: string, password: string) => {
-    db.user().create(username, password, (ack) => {
-      if (ack.err) {
+    db.user().create(username, password, ({ err }) => {
+      if (err) {
         setUsername(null);
-        console.error("Error creating user:", ack?.err);
-        window.alert(ack.err);
-        return;
+        alert(err);
       } else {
-        console.log("User created:", ack);
-        db.user().auth(username, password, (ack) => {
-          if (ack.err) {
-            setUsername(null);
-            console.error("Error creating user:", ack?.err);
-            window.alert(ack.err);
-            return;
-          }
-        });
+        login(username, password);
       }
     });
   };
 
   const login = (username: string, password: string) => {
-    db.user().auth(username, password, (ack) => {
-      if (ack.err) {
+    db.user().auth(username, password, ({ err }) => {
+      if (err) {
         setUsername(null);
-        console.error("Error logging in:", ack?.err);
-        window.alert(ack.err);
+        alert(err);
       }
     });
   };
