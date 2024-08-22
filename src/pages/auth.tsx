@@ -57,10 +57,10 @@ export default function AuthPage() {
     <div className="h-screen grid place-items-center">
       <Card className="w-full max-w-sm shadow-2xl shadow-gray-700">
         <CardHeader>
-          <CardTitle className="text-3xl">
+          <CardTitle className="text-3xl text-center">
             <PersonIcon className="inline-block mr-2 h-12 w-12" />
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-center">
             Choose Create an account or login to your existing account
           </CardDescription>
         </CardHeader>
