@@ -9,4 +9,5 @@ import "gun/nts";
 
 export const db = Gun();
 export const sea = SEA;
-export const user = db.user().recall({ sessionStorage: true });
+
+export const User = db.user();
