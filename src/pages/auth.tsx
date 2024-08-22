@@ -55,7 +55,7 @@ export default function AuthPage() {
 
   return (
     <div className="h-screen grid place-items-center">
-      <Card className="w-full max-w-sm shadow-2xl shadow-gray-700">
+      <Card className="w-full max-w-sm bg-opacity-25 border-opacity-50 backdrop-blur bg-gray-950 shadow-gray-700">
         <CardHeader>
           <CardTitle className="text-3xl text-center">
             <PersonIcon className="inline-block mr-2 h-12 w-12" />
