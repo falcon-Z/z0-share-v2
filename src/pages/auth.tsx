@@ -11,47 +11,42 @@ import {
 import { Input } from "@falcon-z/components/ui/input";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
+import { useAuth } from "@falcon-z/hooks/useAuth";
 
 export default function AuthPage() {
-  // State for storing form values and errors
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
+  const [isValid, setIsValid] = useState(true);
+  const { createUser, login } = useAuth();
 
-  // Validate form fields
   const validate = () => {
-    let valid = true;
-    let errors = { username: "", password: "" };
+    const error = { username: "", password: "" };
 
     if (!formData.username) {
-      errors.username = "Username is required";
-      valid = false;
+      error.username = "Username is required";
+      setIsValid(false);
     }
     if (!formData.password) {
-      errors.password = "Password is required";
-      valid = false;
+      error.password = "Password is required";
+      setIsValid(false);
     }
 
     setErrors(errors);
-    return valid;
+    return isValid;
   };
 
-  // Handle form submission for creating an account
-  const createAccount = () => {
+  const handleUserCreate = () => {
     if (validate()) {
-      console.log("Creating account with:", formData);
-      // Add your account creation logic here
+      createUser(formData.username, formData.password);
     }
   };
 
-  // Handle form submission for login
-  const login = () => {
+  const handleLogin = () => {
     if (validate()) {
-      console.log("Logging in with:", formData);
-      // Add your login logic here
+      login(formData.username, formData.password);
     }
   };
 
-  // Handle input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -60,7 +55,7 @@ export default function AuthPage() {
 
   return (
     <div className="h-screen grid place-items-center">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-sm shadow-2xl shadow-gray-700">
         <CardHeader>
           <CardTitle className="text-3xl">
             <PersonIcon className="inline-block mr-2 h-12 w-12" />
@@ -97,10 +92,14 @@ export default function AuthPage() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between space-x-4">
-          <Button className="w-full" variant={"ghost"} onClick={createAccount}>
+          <Button
+            className="w-full"
+            variant={"ghost"}
+            onClick={handleUserCreate}
+          >
             Create new account
           </Button>
-          <Button className="w-full" onClick={login}>
+          <Button className="w-full" onClick={handleLogin}>
             Sign in
           </Button>
         </CardFooter>
