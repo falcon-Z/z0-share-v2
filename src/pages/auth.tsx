@@ -17,7 +17,7 @@ export default function AuthPage() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({ username: "", password: "" });
   const [isValid, setIsValid] = useState(true);
-  const { createUser, login, user } = useAuth();
+  const { createUser, login } = useAuth();
 
   const validate = () => {
     const error = { username: "", password: "" };

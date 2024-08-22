@@ -1,5 +1,6 @@
+import NewPost from "@falcon-z/components/feed/newPost";
 import Header from "@falcon-z/components/header";
-import { Card, CardHeader } from "@falcon-z/components/ui/card";
+import { Card, CardContent, CardHeader } from "@falcon-z/components/ui/card";
 import { ListBulletIcon } from "@radix-ui/react-icons";
 
 export default function FeedPage() {
@@ -13,6 +14,11 @@ export default function FeedPage() {
             Feed
           </h1>
         </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-4">
+            <NewPost />
+          </div>
+        </CardContent>
       </Card>
     </div>
   );
