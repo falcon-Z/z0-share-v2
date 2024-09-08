@@ -2,7 +2,6 @@ import { PlusCircledIcon, Share2Icon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { set } from "react-hook-form";
 import { db, sea, User } from "@falcon-z/lib/db";
 
 export default function NewPost() {
@@ -22,7 +21,9 @@ export default function NewPost() {
     return isValid;
   };
 
-  const handlePostCreate = async () => {
+  const handlePostCreate = async (event) => {
+    event.preventDefault();
+
     if (validate()) {
       const secret = await sea.encrypt(formData.postContent, "#foo");
       const message = await User.get("all").set({ what: secret });

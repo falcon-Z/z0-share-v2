@@ -1,5 +1,5 @@
 // src/context/AuthContext.tsx
-import { db } from "@falcon-z/lib/db";
+import { db, User } from "@falcon-z/lib/db";
 import { createContext, useState, ReactNode, useEffect } from "react";
 
 export interface AuthContextType {
@@ -14,7 +14,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<string | undefined | null>(null);
 
-  const user = db.user().recall({ sessionStorage: true });
+  const user = User.recall({ sessionStorage: true });
 
   useEffect(() => {
     db.on("auth", async () => {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [user, username]);
 
   const createUser = (username: string, password: string) => {
-    db.user().create(username, password, ({ err }) => {
+    User.create(username, password, ({ err }) => {
       if (err) {
         setUsername(null);
         alert(err);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = (username: string, password: string) => {
-    db.user().auth(username, password, ({ err }) => {
+    User.auth(username, password, ({ err }) => {
       if (err) {
         setUsername(null);
         alert(err);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = () => {
-    db.user().leave();
+    User.leave();
     setUsername(null);
   };
 

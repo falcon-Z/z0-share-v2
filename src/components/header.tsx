@@ -7,7 +7,7 @@ export default function Header() {
   const { username, logout } = useAuth();
 
   return (
-    <header className="fixed top-0 w-full  border-b-2 backdrop-blur  bg-gray-950 bg-opacity-25 border-gray-950/50 py-4 px-8l">
+    <header className="fixed top-0 w-full  border-b-2 backdrop-blur  bg-gray-950 bg-opacity-25 border-gray-950/50 py-4 px-8l z-50">
       <div className="container flex justify-between items-center px-8 py-2">
         <h1 className="text-2xl font-semibold flex items-center justify-center">
           Z0-Share

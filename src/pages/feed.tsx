@@ -2,7 +2,7 @@ import NewPost from "@falcon-z/components/feed/newPost";
 import Header from "@falcon-z/components/header";
 import { Avatar, AvatarFallback } from "@falcon-z/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@falcon-z/components/ui/card";
-import { db, sea } from "@falcon-z/lib/db";
+import { db, sea, User } from "@falcon-z/lib/db";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { ListBulletIcon } from "@radix-ui/react-icons";
 import Gun from "gun/gun";
@@ -18,42 +18,52 @@ export default function FeedPage() {
   >([]);
 
   useEffect(() => {
-    db.get("feed")
-      .map()
-      .once(async (data, id) => {
-        if (data) {
-          //key for end to end encryption
-          const key = "#foo";
+    const key = "#foo";
+    const postsSet = new Set();
 
-          const post = {
-            who: await db.user(data).get("alias"),
-            what: (await sea.decrypt(data.what, key)) + "",
-            when: Gun.state.is(data, "what"),
-          };
+    const loadFeed = async () => {
+      const unsubscribe = db
+        .get("feed")
+        .map()
+        .once(async (data, id) => {
+          if (data && !postsSet.has(id)) {
+            postsSet.add(id);
 
-          console.log(post);
+            const post = {
+              who: await db.user(data).get("alias"),
+              what: (await sea.decrypt(data.what, key)) + "",
+              when: id,
+            };
 
-          if (post.what) {
-            setPosts((prev) => [{ ...post, who: String(post.who) }, ...prev]);
+            console.log(post);
+
+            if (post.what) {
+              setPosts((prev) => {
+                const newPosts = [{ ...post, who: String(post.who) }, ...prev];
+                return newPosts.sort((a, b) => b.when - a.when);
+              });
+            }
           }
-        }
-      });
-  });
+        });
+
+      return unsubscribe;
+    };
+
+    loadFeed();
+  }, []);
 
   return (
     <div className="h-full w-full">
       <Header />
-      <Card className="w-full h-full container mx-auto my-32 bg-opacity-25  border-opacity-50 backdrop-blur bg-gray-950">
+      <Card className="w-full h-full container mx-auto my-32 bg-opacity-25  border-opacity-50 backdrop-blur bg-gray-950 overflow-auto">
         <CardHeader>
           <h1 className="text-2xl font-semibold flex items-center">
             <ListBulletIcon className="inline mr-2 h-8 w-8" />
             Feed
           </h1>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
-            <NewPost />
-          </div>
+        <CardContent className="flex flex-col  gap-8">
+          <NewPost />
           <ul className="flex flex-col gap-4">
             {posts.map((post, index) => (
               <li key={index}>

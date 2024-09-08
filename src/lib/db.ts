@@ -7,7 +7,9 @@ import "gun/lib/rindexed";
 import "gun/lib/webrtc";
 import "gun/nts";
 
-export const db = Gun();
+export const db = Gun({
+  peers: ["http://localhost:3000/gun"],
+});
 export const sea = SEA;
 
 export const User = db.user();
